@@ -1,0 +1,1611 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ==================================================
+   1. DESIGN TOKENS
+   ================================================== */
+:root {
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Backgrounds */
+  --bg-dark-navy: #070914;
+  --bg-dark-surface: rgba(20, 23, 48, 0.82);
+  --bg-card: linear-gradient(145deg, rgba(38, 42, 76, 0.82), rgba(22, 25, 49, 0.92));
+  --bg-input: rgba(8, 10, 24, 0.78);
+  
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-input: rgba(255, 255, 255, 0.08);
+  
+  /* Accents */
+  --color-violet: #8b5cf6;
+  --color-pink: #ec4899;
+  --color-blue: #3b82f6;
+  
+  /* Text */
+  --text-primary: #ffffff;
+  --text-secondary: #aaaac1;
+  --text-muted: #7b7e99;
+  
+  /* Glows */
+  --glow-violet: rgba(139, 92, 246, 0.3);
+  --glow-pink: rgba(236, 72, 153, 0.3);
+  
+  /* Brand Gradients */
+  --brand-gradient: linear-gradient(135deg, #6d3df5 0%, #a847f0 45%, #ec4899 100%);
+}
+
+/* ==================================================
+   2. GLOBAL BACKGROUND & ATMOSPHERE
+   ================================================== */
+body {
+  background: 
+    radial-gradient(700px 500px at 5% 10%, rgba(124, 58, 237, 0.18), transparent 65%),
+    radial-gradient(700px 500px at 95% 15%, rgba(236, 72, 153, 0.13), transparent 65%),
+    radial-gradient(800px 600px at 55% 100%, rgba(79, 70, 229, 0.12), transparent 68%),
+    linear-gradient(145deg, #070914 0%, #101329 50%, #090b19 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-sans) !important;
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Reset any background colors that block the body's dark navy */
+#root > div {
+  background: transparent !important;
+}
+
+/* Atmospheric lighting pseudo-elements */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+body::before {
+  /* large violet blurred circle */
+  top: 10%;
+  left: 10%;
+  width: 400px;
+  height: 400px;
+  background: rgba(124, 58, 237, 0.08);
+}
+
+body::after {
+  /* large pink blurred circle */
+  bottom: 10%;
+  right: 10%;
+  width: 500px;
+  height: 500px;
+  background: rgba(236, 72, 153, 0.06);
+}
+
+/* Very subtle grid overlay on the main container */
+.min-h-screen::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(rgba(139, 92, 246, 0.025) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(139, 92, 246, 0.025) 1px, transparent 1px);
+  background-size: 42px 42px;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* ==================================================
+   3. TYPOGRAPHY
+   ================================================== */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary) !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+p, span, label, td {
+  color: var(--text-secondary);
+}
+
+/* ==================================================
+   4. NAVBAR
+   ================================================== */
+nav {
+  background: rgba(11, 14, 29, 0.6) !important;
+  backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  padding: 1rem 2.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Nav Brand text */
+nav a.text-xl, nav .font-bold {
+  background: var(--brand-gradient) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 800 !important;
+}
+
+/* ==================================================
+   5. ROUTE LINKS
+   ================================================== */
+nav a {
+  color: var(--text-secondary) !important;
+  font-weight: 500 !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  text-decoration: none !important;
+  display: inline-block;
+}
+
+nav a:hover {
+  color: var(--text-primary) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Active links */
+nav a.active, nav a[aria-current="page"] {
+  color: var(--text-primary) !important;
+  background: rgba(139, 92, 246, 0.10) !important;
+}
+nav a.active::after, nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-violet), var(--color-pink));
+  border-radius: 2px;
+}
+
+/* ==================================================
+   6. DASHBOARD SHELL & CONTAINERS
+   ================================================== */
+/* Target the main inner wrapper */
+.max-w-7xl.mx-auto {
+  margin-top: 2rem !important;
+  margin-bottom: 2rem !important;
+  padding: 32px 48px !important;
+  max-width: 1400px !important;
+  background: transparent !important;
+}
+
+/* Remove harsh white from ANY remaining components */
+.bg-white, .p-6.bg-white {
+  background: var(--bg-dark-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  backdrop-filter: blur(18px) !important;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.40) !important;
+  border-radius: 18px !important;
+}
+
+/* ==================================================
+   7. AGENT WORKLOAD & DASHBOARD SPECIFICS
+   ================================================== */
+/* Dashboard Heading */
+.p-6.bg-white > h2, h2.border-b {
+  font-weight: 700 !important;
+  letter-spacing: -.03em !important;
+  color: #f8f6ff !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  position: relative;
+  padding-bottom: 12px !important;
+  margin-bottom: 24px !important;
+}
+
+.p-6.bg-white > h2::after, h2.border-b::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 45px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+}
+
+/* Agent Cards */
+.grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 > div,
+.p-4.border.rounded.shadow-sm.flex.flex-col {
+  background: var(--bg-card) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 15px !important;
+  box-shadow: 10px 12px 30px rgba(0, 0, 0, 0.38), -4px -4px 15px rgba(60, 60, 100, 0.08) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+
+/* Hover for Agent Cards (Anti-gravity) */
+.p-4.border.rounded.shadow-sm.flex.flex-col:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(168, 85, 247, 0.35) !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.40), 0 0 25px rgba(139, 92, 246, 0.08) !important;
+}
+
+/* Agent Names & Details */
+.font-bold.text-lg {
+  color: #ffffff !important;
+  letter-spacing: -0.01em !important;
+}
+.text-xs.text-gray-500 {
+  color: #7c809f !important;
+}
+
+/* Agent Status Badges */
+/* Online */
+.bg-green-100.text-green-800 {
+  background: rgba(16, 185, 129, 0.10) !important;
+  border: 1px solid rgba(52, 211, 153, 0.22) !important;
+  color: #62e0b5 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.1) !important;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.3) !important;
+}
+/* Offline */
+.bg-red-100.text-red-800 {
+  background: rgba(244, 63, 94, 0.10) !important;
+  border: 1px solid rgba(244, 63, 94, 0.22) !important;
+  color: #ff829e !important;
+}
+
+/* Workload Progress Bar */
+/* Track */
+.bg-gray-200.rounded-full.h-2\.5 {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 999px !important;
+  height: 8px !important;
+  overflow: hidden !important;
+}
+/* Fill */
+.bg-gray-200.rounded-full.h-2\.5 > div {
+  background: linear-gradient(90deg, #4f7cff, #8b5cf6, #d946ef) !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.28) !important;
+  transition: width 0.4s ease !important;
+}
+
+/* Load Capacity Text */
+.text-sm.mb-1 > span:first-child {
+  color: #aaaac1 !important;
+}
+.text-sm.mb-1 > span.font-semibold {
+  color: #f4f1ff !important;
+  font-weight: 700 !important;
+}
+.text-xs.mt-1.text-gray-500 {
+  color: #8588a4 !important;
+  font-weight: 600 !important;
+}
+
+/* Toggle Availability Button */
+.mt-4.w-full.py-2.border.rounded {
+  background: linear-gradient(145deg, rgba(52, 55, 90, 0.75), rgba(27, 30, 57, 0.85)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+}
+.mt-4.w-full.py-2.border.rounded:hover {
+  border-color: rgba(236, 72, 153, 0.4) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2) !important;
+  background: linear-gradient(145deg, rgba(62, 65, 100, 0.8), rgba(37, 40, 67, 0.9)) !important;
+}
+.mt-4.w-full.py-2.border.rounded:active {
+  transform: translateY(1px) !important;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+.mt-4.w-full.py-2.border.rounded:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.4) !important;
+}
+
+/* ==================================================
+   8. TABLES
+   ================================================== */
+table {
+  background: transparent !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  width: 100% !important;
+}
+
+thead tr {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+
+th {
+  color: var(--text-primary) !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 1rem !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  font-weight: 600 !important;
+}
+
+td {
+  padding: 1rem !important;
+  color: var(--text-secondary) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+  background: rgba(11, 14, 29, 0.4) !important;
+  transition: background 0.2s ease !important;
+}
+
+tbody tr:hover td {
+  background: rgba(139, 92, 246, 0.05) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ==================================================
+   9. INPUTS / SEARCH / FILTERS
+   ================================================== */
+input, select, textarea {
+  background: var(--bg-input) !important;
+  border: 1px solid var(--border-input) !important;
+  border-radius: 11px !important;
+  color: var(--text-primary) !important;
+  padding: 0.75rem 1rem !important;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  outline: none !important;
+}
+
+input:hover, select:hover, textarea:hover {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-pink) !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12), 0 0 24px rgba(236, 72, 153, 0.08) !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* ==================================================
+   10. GLOBAL BUTTONS
+   ================================================== */
+button:not(.mt-4.w-full.py-2.border.rounded) {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px !important;
+  padding: 0.6rem 1.2rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+button:not(.mt-4.w-full.py-2.border.rounded):hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px) !important;
+  border-color: rgba(168, 85, 247, 0.3) !important;
+  box-shadow: 0 4px 15px var(--glow-violet) !important;
+}
+
+button:not(.mt-4.w-full.py-2.border.rounded):active {
+  transform: translateY(1px) !important;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2) !important;
+}
+
+button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* Primary CTA Buttons */
+button.bg-blue-600, 
+button.bg-gradient-to-r, 
+button[type="submit"] {
+  background: var(--brand-gradient) !important;
+  border: none !important;
+}
+
+button.bg-blue-600:hover, 
+button.bg-gradient-to-r:hover, 
+button[type="submit"]:hover {
+  background: linear-gradient(135deg, #7047f5 0%, #a847ef 50%, #ec4899 100%) !important;
+  box-shadow: 0 10px 30px rgba(168, 85, 247, 0.24) !important;
+  filter: brightness(1.1) !important;
+}
+
+/* ==================================================
+   11. GENERAL STATUS BADGES
+   ================================================== */
+.bg-blue-900\/50, .text-blue-400 {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: #60a5fa !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+
+.bg-emerald-900\/50, .text-emerald-400 {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+.bg-rose-900\/50, .text-rose-400 {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+.bg-purple-900\/50, .text-purple-400 {
+  background: rgba(139, 92, 246, 0.15) !important;
+  color: #a78bfa !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+.bg-amber-900\/50, .text-amber-400 {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+
+/* ============================================================
+   LOGIN PAGE — CINEMATIC UI BACKGROUND
+   ============================================================ */
+
+/* 1. Login background & 2. Background overlays */
+.min-h-screen.flex.items-center.justify-center {
+  position: relative !important;
+  z-index: 1 !important;
+  overflow: hidden !important;
+}
+
+/* 3. Atmospheric effects (vignette and glow) */
+.min-h-screen.flex.items-center.justify-center::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  /* Vignette & glows */
+  background: 
+    radial-gradient(ellipse at center, transparent 20%, rgba(4, 5, 15, 0.52) 100%),
+    radial-gradient(700px circle at 15% 20%, rgba(139, 92, 246, 0.15), transparent 60%),
+    radial-gradient(700px circle at 85% 80%, rgba(236, 72, 153, 0.1), transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 4. Login card & 7. Login form */
+.min-h-screen.flex.items-center.justify-center form {
+  background: rgba(14, 17, 38, 0.62) !important;
+  backdrop-filter: blur(22px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(130%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55), 0 0 45px rgba(139, 92, 246, 0.10) !important;
+  padding: 3.5rem !important;
+  width: 100% !important;
+  max-width: 480px !important;
+  position: relative;
+  transition: transform 0.3s ease !important;
+}
+
+/* 23. Anti-gravity glass hover */
+.min-h-screen.flex.items-center.justify-center form:hover {
+  transform: translateY(-2px) !important;
+}
+
+/* 13. Login title */
+.min-h-screen.flex.items-center.justify-center form h2 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  letter-spacing: -.03em !important;
+  font-size: 2.25rem !important;
+  margin-bottom: 2rem !important;
+  text-align: center !important;
+  background: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+  position: relative;
+  padding-bottom: 12px !important;
+}
+
+.min-h-screen.flex.items-center.justify-center form h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+}
+
+/* 8. Inputs */
+.min-h-screen.flex.items-center.justify-center form input {
+  background: rgba(6, 8, 21, 0.68) !important;
+  border: 1px solid rgba(255, 255, 255, 0.11) !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  box-shadow: inset 2px 3px 8px rgba(0, 0, 0, 0.25) !important;
+  padding: 1rem !important;
+  transition: all 0.22s ease !important;
+}
+
+/* 15. Input focus response */
+.min-h-screen.flex.items-center.justify-center form input:hover {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.min-h-screen.flex.items-center.justify-center form input:focus,
+.min-h-screen.flex.items-center.justify-center form input:focus-visible {
+  border-color: rgba(168, 85, 247, 0.78) !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12), 0 0 25px rgba(236, 72, 153, 0.08) !important;
+  outline: none !important;
+}
+
+.min-h-screen.flex.items-center.justify-center form label {
+  color: var(--text-secondary) !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* 16. Login Button */
+.min-h-screen.flex.items-center.justify-center form button[type="submit"] {
+  background: linear-gradient(135deg, #7047f5 0%, #a847ef 48%, #ec4899 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 11px !important;
+  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.25) !important;
+  margin-top: 1.5rem !important;
+  padding: 1.1rem !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 0.05em !important;
+  width: 100% !important;
+  transition: all 0.25s ease !important;
+}
+
+/* 17. Button hover */
+.min-h-screen.flex.items-center.justify-center form button[type="submit"]:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4) !important;
+  filter: brightness(1.1) !important;
+}
+
+/* 18. Button active */
+.min-h-screen.flex.items-center.justify-center form button[type="submit"]:active {
+  transform: translateY(1px) !important;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.3) !important;
+}
+
+/* 19. Button focus */
+.min-h-screen.flex.items-center.justify-center form button[type="submit"]:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.6) !important;
+}
+
+/* 20. Button disabled */
+.min-h-screen.flex.items-center.justify-center form button[type="submit"]:disabled {
+  background: rgba(40, 42, 60, 0.8) !important;
+  box-shadow: none !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* 21. Register / Forgot Password Links */
+.min-h-screen.flex.items-center.justify-center form button[type="button"] {
+  background: transparent !important;
+  border: none !important;
+  color: #c8bde0 !important;
+  box-shadow: none !important;
+  padding: 0.5rem !important;
+  transition: color 0.25s ease !important;
+  font-weight: 500 !important;
+}
+
+.min-h-screen.flex.items-center.justify-center form button[type="button"]:hover {
+  color: #f08bc5 !important;
+  text-decoration: underline !important;
+  transform: none !important;
+}
+
+/* 22. Checkbox */
+.min-h-screen.flex.items-center.justify-center form input[type="checkbox"] {
+  accent-color: #a855f7 !important;
+}
+
+/* ==================================================
+   RESPONSIVE STYLES
+   ================================================== */
+@media (max-width: 1024px) {
+  .max-w-7xl.mx-auto {
+    max-width: 96% !important;
+    padding: 1.5rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .max-w-7xl.mx-auto {
+    padding: 1rem !important;
+    margin-top: 1rem !important;
+    border-radius: 14px !important;
+  }
+  
+  nav {
+    flex-direction: column !important;
+    padding: 1rem !important;
+  }
+  
+  nav div {
+    margin-top: 1rem !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+  }
+  
+  nav a {
+    font-size: 0.9rem !important;
+    padding: 0.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .min-h-screen.flex.items-center.justify-center form {
+    padding: 2rem !important;
+    border-radius: 20px !important;
+  }
+}
+
+/* ==================================================
+   ACCESSIBILITY / REDUCED MOTION
+   ================================================== */
+*:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.5) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transform: none !important;
+  }
+}
+
+
+/* ============================================================
+   ZENDESK HUB — PREMIUM UI V2
+   CSS-only visual upgrade.
+   React logic / routes / DOM are intentionally untouched.
+   ============================================================ */
+
+:root {
+  --app-bg-0: #060713;
+  --app-bg-1: #0b0e1f;
+  --app-bg-2: #11142b;
+  --app-surface: rgba(18, 21, 45, .78);
+  --app-surface-strong: rgba(23, 26, 54, .92);
+  --app-surface-soft: rgba(34, 38, 73, .55);
+  --app-border: rgba(255,255,255,.075);
+  --app-border-strong: rgba(255,255,255,.12);
+  --app-text: #f8f7ff;
+  --app-text-2: #c6c4d8;
+  --app-muted: #8588a5;
+  --app-violet: #8b5cf6;
+  --app-violet-2: #a855f7;
+  --app-pink: #ec4899;
+  --app-magenta: #d946ef;
+  --app-cyan: #22d3ee;
+  --app-blue: #4f7cff;
+  --app-emerald: #34d399;
+  --app-amber: #fbbf24;
+  --app-rose: #fb7185;
+
+  --app-brand: linear-gradient(135deg, #7047f5 0%, #a547ef 48%, #ec4899 100%);
+  --app-brand-hover: linear-gradient(135deg, #835bff 0%, #bc57ff 48%, #ff62ad 100%);
+
+  --app-shadow-lg:
+    0 28px 80px rgba(0,0,0,.38),
+    0 8px 25px rgba(3,5,15,.28);
+
+  --app-shadow-card:
+    10px 16px 34px rgba(0,0,0,.34),
+    -5px -5px 16px rgba(54,58,98,.08);
+
+  --app-focus:
+    0 0 0 3px rgba(168,85,247,.14),
+    0 0 30px rgba(236,72,153,.08);
+}
+
+/* ------------------------------------------------------------
+   Global shell / cinematic background
+   ------------------------------------------------------------ */
+
+html,
+body,
+#root {
+  min-height: 100% !important;
+  background: var(--app-bg-0) !important;
+}
+
+body {
+  color: var(--app-text) !important;
+  background:
+    radial-gradient(850px 560px at 3% -5%, rgba(106,71,245,.18), transparent 64%),
+    radial-gradient(760px 520px at 100% 3%, rgba(236,72,153,.13), transparent 64%),
+    radial-gradient(900px 650px at 45% 108%, rgba(78,73,220,.10), transparent 66%),
+    linear-gradient(145deg, var(--app-bg-0), var(--app-bg-1) 48%, #090b19 100%) !important;
+  font-family: var(--font-sans) !important;
+  overflow-x: hidden !important;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 999px;
+  filter: blur(90px);
+  opacity: .3;
+}
+
+body::before {
+  width: 420px;
+  height: 420px;
+  left: -140px;
+  top: 18%;
+  background: rgba(124,58,237,.20);
+}
+
+body::after {
+  width: 520px;
+  height: 520px;
+  right: -170px;
+  bottom: -130px;
+  background: rgba(236,72,153,.14);
+}
+
+::selection {
+  background: rgba(168,85,247,.28) !important;
+  color: #fff !important;
+}
+
+/* ------------------------------------------------------------
+   App background wrapper
+   ------------------------------------------------------------ */
+
+.min-h-screen {
+  position: relative !important;
+  isolation: isolate !important;
+}
+
+.min-h-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(139,92,246,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,.018) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.72), transparent 92%);
+}
+
+/* ------------------------------------------------------------
+   Typography
+   ------------------------------------------------------------ */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--app-text) !important;
+  font-weight: 700 !important;
+  letter-spacing: -.028em !important;
+}
+
+p, span, label, td, th {
+  text-rendering: optimizeLegibility;
+}
+
+.text-slate-100 { color: #f3f1ff !important; }
+.text-slate-200 { color: #e3e0f0 !important; }
+.text-slate-300 { color: #cbc8da !important; }
+.text-slate-400 { color: #999bb4 !important; }
+.text-slate-500 { color: #7e819d !important; }
+
+.text-gray-500 { color: #8588a5 !important; }
+.text-gray-600 { color: #a3a5bb !important; }
+.text-gray-700 { color: #bfc0d0 !important; }
+.text-gray-800,
+.text-gray-900 { color: #f5f3ff !important; }
+
+/* ------------------------------------------------------------
+   Navbar — premium floating header
+   ------------------------------------------------------------ */
+
+nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+  min-height: 68px !important;
+  padding: .65rem 1.5rem !important;
+  background:
+    linear-gradient(180deg, rgba(11,14,29,.92), rgba(10,12,27,.76)) !important;
+  backdrop-filter: blur(20px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(140%) !important;
+  border-bottom: 1px solid rgba(255,255,255,.07) !important;
+  box-shadow: 0 14px 36px rgba(0,0,0,.24) !important;
+}
+
+nav > div {
+  width: 100% !important;
+}
+
+nav a.text-xl,
+nav .text-xl.font-bold,
+nav .font-bold {
+  background: var(--app-brand) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  font-weight: 800 !important;
+  letter-spacing: -.03em !important;
+}
+
+nav a {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 38px !important;
+  padding: 0 .8rem !important;
+  border-radius: 10px !important;
+  color: #aaaac0 !important;
+  text-decoration: none !important;
+  transition:
+    color .2s ease,
+    background .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease !important;
+}
+
+nav a:hover {
+  color: #fff !important;
+  background: rgba(255,255,255,.045) !important;
+  transform: translateY(-1px);
+}
+
+nav a.active,
+nav a[aria-current="page"] {
+  color: #fff !important;
+  background: linear-gradient(135deg, rgba(139,92,246,.12), rgba(236,72,153,.07)) !important;
+  box-shadow: inset 0 0 0 1px rgba(168,85,247,.08) !important;
+}
+
+nav a.active::after,
+nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--app-brand);
+  box-shadow: 0 0 12px rgba(205,78,250,.24);
+}
+
+nav button {
+  min-height: 38px !important;
+  border-radius: 10px !important;
+  background: rgba(255,255,255,.035) !important;
+  border: 1px solid rgba(255,255,255,.09) !important;
+  color: #f4f1ff !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,.18) !important;
+}
+
+nav button:hover {
+  background: var(--app-brand) !important;
+  border-color: transparent !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 25px rgba(133,70,245,.23) !important;
+}
+
+/* ------------------------------------------------------------
+   Main application shell
+   ------------------------------------------------------------ */
+
+.max-w-7xl.mx-auto {
+  width: min(1400px, calc(100% - 32px)) !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+  margin-top: 1.6rem !important;
+  margin-bottom: 2rem !important;
+}
+
+/* ------------------------------------------------------------
+   Reusable glass surfaces
+   ------------------------------------------------------------ */
+
+.bg-white,
+.p-6.bg-white,
+form.bg-white {
+  background:
+    linear-gradient(145deg, rgba(26,29,59,.82), rgba(13,16,35,.90)) !important;
+  border: 1px solid var(--app-border) !important;
+  border-radius: 18px !important;
+  backdrop-filter: blur(18px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+  box-shadow: var(--app-shadow-lg), inset 0 1px 0 rgba(255,255,255,.025) !important;
+}
+
+/* Dashboard sections using current component classes */
+.p-6.bg-\[\#160b2b\]\/60,
+.p-8.bg-\[\#160b2b\]\/60 {
+  background:
+    linear-gradient(145deg, rgba(25,28,60,.82), rgba(13,16,36,.90)) !important;
+  border: 1px solid rgba(255,255,255,.075) !important;
+  border-radius: 18px !important;
+  box-shadow: var(--app-shadow-lg) !important;
+  backdrop-filter: blur(18px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(130%) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.p-6.bg-\[\#160b2b\]\/60::before,
+.p-8.bg-\[\#160b2b\]\/60::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  top: -180px;
+  right: -100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,85,247,.11), transparent 68%);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   Dashboard/stat cards
+   ------------------------------------------------------------ */
+
+.grid.grid-cols-2.gap-4.mb-6 > div {
+  position: relative !important;
+  overflow: hidden !important;
+  background:
+    linear-gradient(145deg, rgba(28,31,62,.86), rgba(14,17,37,.91)) !important;
+  border: 1px solid rgba(255,255,255,.07) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--app-shadow-card) !important;
+  transition:
+    transform .24s ease,
+    box-shadow .24s ease,
+    border-color .24s ease !important;
+}
+
+.grid.grid-cols-2.gap-4.mb-6 > div:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(168,85,247,.27) !important;
+  box-shadow:
+    12px 20px 38px rgba(0,0,0,.38),
+    0 0 28px rgba(139,92,246,.07) !important;
+}
+
+/* status color accents stay meaningful */
+.border-l-emerald-400 { border-left-color: #34d399 !important; }
+.border-l-blue-400 { border-left-color: #60a5fa !important; }
+.border-l-rose-500 { border-left-color: #fb7185 !important; }
+.border-l-slate-400 { border-left-color: #94a3b8 !important; }
+
+/* ------------------------------------------------------------
+   Agent cards
+   ------------------------------------------------------------ */
+
+.p-4.border.rounded.shadow-sm.flex.flex-col {
+  background:
+    linear-gradient(145deg, rgba(34,38,74,.88), rgba(15,18,39,.94)) !important;
+  border: 1px solid rgba(255,255,255,.075) !important;
+  border-radius: 15px !important;
+  box-shadow: var(--app-shadow-card) !important;
+  backdrop-filter: blur(10px) !important;
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease !important;
+}
+
+.p-4.border.rounded.shadow-sm.flex.flex-col:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(176,91,255,.34) !important;
+  box-shadow:
+    12px 20px 40px rgba(0,0,0,.42),
+    0 0 24px rgba(168,85,247,.09) !important;
+}
+
+.p-4.border.rounded.shadow-sm.flex.flex-col h3 {
+  color: #fbf9ff !important;
+}
+
+/* ------------------------------------------------------------
+   Status pills
+   ------------------------------------------------------------ */
+
+.bg-green-100.text-green-800,
+.bg-green-100 {
+  background: rgba(16,185,129,.09) !important;
+  color: #5ee2b2 !important;
+  border: 1px solid rgba(52,211,153,.20) !important;
+  box-shadow: 0 0 14px rgba(16,185,129,.08) !important;
+}
+
+.bg-red-100.text-red-800,
+.bg-red-100 {
+  background: rgba(244,63,94,.09) !important;
+  color: #ff829d !important;
+  border: 1px solid rgba(244,63,94,.20) !important;
+  box-shadow: 0 0 14px rgba(244,63,94,.07) !important;
+}
+
+/* Ticket status classes currently used in TicketList */
+span[class*="bg-emerald-500/10"] {
+  box-shadow: 0 0 14px rgba(16,185,129,.09) !important;
+}
+
+span[class*="bg-rose-500/10"] {
+  box-shadow: 0 0 14px rgba(244,63,94,.09) !important;
+}
+
+/* ------------------------------------------------------------
+   Progress / capacity bars
+   ------------------------------------------------------------ */
+
+.bg-gray-200.rounded-full.h-2\.5,
+.w-full.h-2\.5.bg-gray-200 {
+  background: rgba(255,255,255,.075) !important;
+  border: 1px solid rgba(255,255,255,.04) !important;
+  border-radius: 999px !important;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.25) !important;
+}
+
+.bg-gray-200.rounded-full.h-2\.5 > div {
+  border-radius: inherit !important;
+  box-shadow: 0 0 12px rgba(139,92,246,.28) !important;
+}
+
+.w-full.h-2\.5.bg-gray-200 .bg-blue-600 {
+  background: linear-gradient(90deg, #4f7cff, #8b5cf6, #d946ef) !important;
+}
+
+.w-full.h-2\.5.bg-gray-200 .bg-yellow-400 {
+  background: linear-gradient(90deg, #fbbf24, #fb923c, #f97316) !important;
+}
+
+.w-full.h-2\.5.bg-gray-200 .bg-red-600 {
+  background: linear-gradient(90deg, #fb7185, #ef4444, #e11d48) !important;
+}
+
+/* ------------------------------------------------------------
+   Chart / recent activity
+   ------------------------------------------------------------ */
+
+.p-6.bg-\[\#160b2b\]\/60 h2,
+.p-8.bg-\[\#160b2b\]\/60 h2 {
+  color: #f8f6ff !important;
+}
+
+.p-6.bg-\[\#160b2b\]\/60 h2::after,
+.p-8.bg-\[\#160b2b\]\/60 h2::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 9px;
+  border-radius: 999px;
+  background: var(--app-brand);
+}
+
+.p-6.bg-\[\#160b2b\]\/60 [class*="hover:bg-[#1e293b]"] {
+  transition:
+    transform .2s ease,
+    background .2s ease !important;
+}
+
+.p-6.bg-\[\#160b2b\]\/60 [class*="hover:bg-[#1e293b]"]:hover {
+  transform: translateX(3px);
+  background: rgba(139,92,246,.045) !important;
+}
+
+/* ------------------------------------------------------------
+   Search / filters / forms
+   ------------------------------------------------------------ */
+
+input,
+select,
+textarea {
+  background: rgba(7,10,23,.78) !important;
+  color: #f7f5ff !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 11px !important;
+  box-shadow:
+    inset 3px 3px 8px rgba(0,0,0,.22),
+    0 1px 0 rgba(255,255,255,.015) !important;
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    background .2s ease,
+    transform .2s ease !important;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: rgba(167,139,250,.28) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(192,102,255,.75) !important;
+  box-shadow: var(--app-focus) !important;
+  background: rgba(8,10,25,.90) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6f728d !important;
+}
+
+textarea {
+  resize: vertical !important;
+}
+
+/* Search component */
+.relative.mb-4 input.pl-10 {
+  min-height: 44px !important;
+  padding-left: 2.65rem !important;
+  background:
+    linear-gradient(145deg, rgba(20,24,49,.82), rgba(8,11,24,.88)) !important;
+}
+
+/* ------------------------------------------------------------
+   Tables — tickets + escalations
+   ------------------------------------------------------------ */
+
+.overflow-x-auto.rounded-xl.border,
+.overflow-x-auto {
+  scrollbar-width: thin;
+}
+
+table {
+  width: 100% !important;
+  background: transparent !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  overflow: hidden !important;
+}
+
+thead tr {
+  background:
+    linear-gradient(180deg, rgba(32,35,67,.88), rgba(19,22,46,.88)) !important;
+}
+
+th {
+  padding: .95rem 1rem !important;
+  color: #d7d4e7 !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255,255,255,.07) !important;
+  font-size: .72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .075em !important;
+}
+
+td {
+  padding: .95rem 1rem !important;
+  color: #c4c1d4 !important;
+  background: rgba(8,11,25,.30) !important;
+  border-bottom: 1px solid rgba(255,255,255,.045) !important;
+}
+
+tbody tr {
+  transition:
+    background .18s ease,
+    transform .18s ease !important;
+}
+
+tbody tr:hover td {
+  background: rgba(139,92,246,.045) !important;
+  color: #f5f2ff !important;
+}
+
+/* ------------------------------------------------------------
+   Ticket / escalation action buttons
+   ------------------------------------------------------------ */
+
+button {
+  transition:
+    transform .2s cubic-bezier(.4,0,.2,1),
+    box-shadow .2s ease,
+    border-color .2s ease,
+    background .2s ease,
+    color .2s ease !important;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px) scale(.985) !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(168,85,247,.13), 0 0 20px rgba(236,72,153,.06) !important;
+}
+
+button:disabled {
+  filter: saturate(.5) !important;
+}
+
+/* Keep green resolve buttons green, but make them premium */
+button.bg-gradient-to-r.from-emerald-500 {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  box-shadow: 0 8px 22px rgba(16,185,129,.16) !important;
+}
+
+button.bg-gradient-to-r.from-emerald-500:hover {
+  box-shadow: 0 12px 28px rgba(16,185,129,.24) !important;
+}
+
+/* Primary pink/purple actions */
+button.bg-gradient-to-r.from-pink-600,
+button[type="submit"].bg-gradient-to-r {
+  background: var(--app-brand) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow:
+    0 12px 28px rgba(139,92,246,.20),
+    0 0 24px rgba(236,72,153,.08) !important;
+}
+
+button.bg-gradient-to-r.from-pink-600:hover,
+button[type="submit"].bg-gradient-to-r:hover {
+  background: var(--app-brand-hover) !important;
+  box-shadow:
+    0 15px 32px rgba(139,92,246,.27),
+    0 0 28px rgba(236,72,153,.11) !important;
+}
+
+/* ------------------------------------------------------------
+   Empty state
+   ------------------------------------------------------------ */
+
+.bg-gray-50.border.border-dashed {
+  background:
+    linear-gradient(145deg, rgba(26,29,60,.55), rgba(12,15,34,.72)) !important;
+  border: 1px dashed rgba(168,85,247,.26) !important;
+  border-radius: 16px !important;
+  color: var(--app-muted) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025) !important;
+}
+
+.bg-gray-50.border.border-dashed svg {
+  color: #8e83aa !important;
+  filter: drop-shadow(0 0 10px rgba(168,85,247,.12));
+}
+
+/* ------------------------------------------------------------
+   Agent workload specific action button
+   ------------------------------------------------------------ */
+
+.mt-4.w-full.py-2.border.rounded {
+  background:
+    linear-gradient(145deg, rgba(44,48,82,.80), rgba(18,21,43,.90)) !important;
+  color: #ece9fa !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,.22) !important;
+}
+
+.mt-4.w-full.py-2.border.rounded:hover {
+  border-color: rgba(236,72,153,.38) !important;
+  background:
+    linear-gradient(145deg, rgba(53,57,96,.82), rgba(24,27,52,.92)) !important;
+  box-shadow: 0 10px 25px rgba(139,92,246,.14) !important;
+}
+
+/* ------------------------------------------------------------
+   Login — supports current split Login.jsx
+   ------------------------------------------------------------ */
+
+/* The current Login.jsx uses an outer flex container plus a two-panel card.
+   Style that structure without requiring component changes. */
+.login-page {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  background:
+    radial-gradient(700px 520px at 6% 20%, rgba(112,71,245,.16), transparent 64%),
+    radial-gradient(760px 540px at 96% 70%, rgba(236,72,153,.13), transparent 64%),
+    linear-gradient(145deg, #070914 0%, #11132b 48%, #080a17 100%) !important;
+}
+
+.login-page::before,
+.login-page::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(80px);
+}
+
+.login-page::before {
+  width: 420px;
+  height: 420px;
+  left: -120px;
+  top: 10%;
+  background: rgba(112,71,245,.18);
+}
+
+.login-page::after {
+  width: 500px;
+  height: 500px;
+  right: -130px;
+  bottom: -120px;
+  background: rgba(236,72,153,.14);
+}
+
+/* Current Login wide wrapper */
+.login-page > div.flex.flex-col.md\:flex-row,
+.login-page > .flex.flex-col.md\:flex-row {
+  position: relative !important;
+  overflow: hidden !important;
+  width: min(1080px, 94vw) !important;
+  min-height: 620px !important;
+  background:
+    linear-gradient(145deg, rgba(21,24,51,.82), rgba(11,14,30,.94)) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: 28px !important;
+  box-shadow:
+    0 36px 110px rgba(0,0,0,.52),
+    0 0 60px rgba(139,92,246,.08) !important;
+  backdrop-filter: blur(22px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(130%) !important;
+}
+
+/* Left form side */
+.login-page > div.flex.flex-col.md\:flex-row > div:first-child {
+  background:
+    linear-gradient(180deg, rgba(18,21,45,.86), rgba(10,13,30,.93)) !important;
+}
+
+/* Right image side */
+.login-page > div.flex.flex-col.md\:flex-row > div:last-child {
+  min-height: 100% !important;
+  position: relative !important;
+  background-position: center !important;
+  background-size: cover !important;
+}
+
+.login-page > div.flex.flex-col.md\:flex-row > div:last-child::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(10,12,28,.05), rgba(12,8,31,.40)),
+    linear-gradient(90deg, rgba(92,46,148,.10), rgba(236,72,153,.04));
+  pointer-events: none;
+}
+
+.login-page form {
+  width: 100% !important;
+  max-width: 410px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.login-page form h2 {
+  text-shadow: 0 0 22px rgba(236,72,153,.10) !important;
+}
+
+.login-page form input,
+.login-page form select,
+.login-page form textarea {
+  min-height: 48px !important;
+}
+
+.login-page form button[type="submit"] {
+  min-height: 48px !important;
+}
+
+.login-page form button[type="button"] {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #bda8da !important;
+}
+
+.login-page form button[type="button"]:hover {
+  color: #ff91c4 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* ------------------------------------------------------------
+   Utility backgrounds that would otherwise become light
+   ------------------------------------------------------------ */
+
+.bg-gray-100,
+.bg-gray-50 {
+  background: rgba(16,19,42,.52) !important;
+}
+
+.bg-gray-200 {
+  background: rgba(255,255,255,.075) !important;
+}
+
+.bg-gray-800 {
+  background: #0a0c1a !important;
+  color: #fff !important;
+}
+
+/* ------------------------------------------------------------
+   Loading / error states
+   ------------------------------------------------------------ */
+
+.animate-pulse {
+  animation: ui-pulse 2s ease-in-out infinite !important;
+}
+
+@keyframes ui-pulse {
+  0%,100% { opacity: .72; }
+  50% { opacity: 1; }
+}
+
+/* ------------------------------------------------------------
+   Smooth but restrained motion
+   ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .p-6.bg-\[\#160b2b\]\/60,
+  .p-8.bg-\[\#160b2b\]\/60,
+  .p-4.border.rounded.shadow-sm.flex.flex-col {
+    animation: surface-breathe 7s ease-in-out infinite;
+    animation-delay: -2s;
+  }
+
+  @keyframes surface-breathe {
+    0%,100% {
+      box-shadow: var(--app-shadow-lg);
+    }
+    50% {
+      box-shadow:
+        0 32px 86px rgba(0,0,0,.40),
+        0 0 26px rgba(139,92,246,.045);
+    }
+  }
+}
+
+/* ------------------------------------------------------------
+   Responsive layout
+   ------------------------------------------------------------ */
+
+@media (max-width: 1024px) {
+  .max-w-7xl.mx-auto {
+    width: min(96%, 1200px) !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .login-page > div.flex.flex-col.md\:flex-row,
+  .login-page > .flex.flex-col.md\:flex-row {
+    width: 96vw !important;
+  }
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: .65rem .9rem !important;
+  }
+
+  nav > div {
+    flex-wrap: wrap !important;
+    gap: .5rem !important;
+  }
+
+  nav > div > div:nth-child(2) {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start !important;
+    padding-bottom: .15rem;
+  }
+
+  .max-w-7xl.mx-auto {
+    width: calc(100% - 16px) !important;
+    padding-left: .75rem !important;
+    padding-right: .75rem !important;
+    margin-top: 1rem !important;
+  }
+
+  .login-page {
+    padding: 14px !important;
+  }
+
+  .login-page > div.flex.flex-col.md\:flex-row,
+  .login-page > .flex.flex-col.md\:flex-row {
+    min-height: 0 !important;
+    border-radius: 22px !important;
+  }
+
+  .login-page > div.flex.flex-col.md\:flex-row > div:last-child {
+    min-height: 280px !important;
+    order: -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .max-w-7xl.mx-auto {
+    width: calc(100% - 10px) !important;
+    padding: .5rem !important;
+  }
+
+  nav a {
+    padding: 0 .55rem !important;
+    font-size: .78rem !important;
+  }
+
+  .login-page > div.flex.flex-col.md\:flex-row > div:first-child {
+    padding: 1.35rem !important;
+  }
+
+  .login-page > div.flex.flex-col.md\:flex-row > div:last-child {
+    min-height: 220px !important;
+  }
+
+  table {
+    min-width: 820px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   Accessibility
+   ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
